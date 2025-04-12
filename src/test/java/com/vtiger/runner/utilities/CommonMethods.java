@@ -14,7 +14,6 @@ import java.time.Duration;
 
 public class CommonMethods {
 
-    private static final Log log = LogFactory.getLog(CommonMethods.class);
     public WebDriver driver;
 
     public WebDriverWait wait;
@@ -40,17 +39,6 @@ public class CommonMethods {
         }
     }
 
-    public void Type(String elmstr, String value) {
-        try {
-            WebElement elm = driver.findElement(By.xpath(elmstr));
-            wait.until(ExpectedConditions.visibilityOf(elm));
-            elm.clear();
-            elm.sendKeys(value);
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
 
     public void clickelement(WebElement elm, String msg) {
         try {
@@ -63,18 +51,6 @@ public class CommonMethods {
         }
     }
 
-    public void clickelement(String elmstr, String elementType) {
-        WebElement elm = null;
-        try {
-            if (elementType.equalsIgnoreCase("Link"))
-                elm = driver.findElement(By.linkText("elmstr"));
-            wait.until(ExpectedConditions.elementToBeClickable(elm));
-            elm.click();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
-
     public void msgdisplay(WebElement elm) {
         try {
             wait.until(ExpectedConditions.visibilityOf(elm));
@@ -84,14 +60,6 @@ public class CommonMethods {
         }
     }
 
-    public void textlabledisplay(WebElement elm) {
-        try {
-            wait.until(ExpectedConditions.visibilityOf(elm));
-            elm.isDisplayed();
-        } catch (Exception e) {
-            e.getStackTrace();
-        }
-    }
 
 }
 

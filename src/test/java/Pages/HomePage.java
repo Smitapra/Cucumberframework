@@ -24,10 +24,12 @@ public class HomePage extends HeaderPage {
     WebElement TOP_link;
 
     public void verifyTickets()
+
     {
         tickets_link.isDisplayed();
     }
     public void verifytop_potential()
+
     {
         TOP_link.isDisplayed();
     }

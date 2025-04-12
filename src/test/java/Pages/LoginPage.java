@@ -15,31 +15,31 @@ public class LoginPage extends CommonMethods {
 
     public LoginPage(WebDriver driver, ExtentTest logger)
     {
-        super(driver, logger);
+        super(driver,logger);
         this.driver = driver;
-        this.logger = logger ;
+        this.logger = logger;
         PageFactory.initElements(driver , this);
     }
 
-    @FindBy(name = "user_name")
+    @FindBy(name="user_name")
     WebElement userid;
 
-    @FindBy(name = "user_password")
+    @FindBy(xpath="//input[@name='user_password']")
     WebElement password;
 
-    @FindBy(name = "Login")
+    @FindBy(name ="Login")
     WebElement login;
 
-    @FindBy(xpath = "\"//*[contains(text(),'You must specify a valid username and password.')]\"")
+    @FindBy(xpath="//*[contains(text(),'You must specify a valid username and password.')]")
     WebElement errormsg;
 
 
 
     public void login(String uid , String pwd)
     {
-        Type(userid,uid,uid + "password enter successfully");
-        Type(password,pwd,pwd + "password enter successfully");
-        clickelement(login,"user successfully click to login button");
+        Type(userid,uid, uid + "password enter successfully");
+        Type(password,pwd, pwd + "password enter successfully");
+        clickelement(login, "user successfully click to login button");
 
     }
 

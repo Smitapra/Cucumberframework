@@ -15,6 +15,7 @@ public class Leadsteps extends Basesteps
 
     @When("user click on the new lead link")
     public void user_click_on_the_new_lead_link()
+
     {
      ldp.clicknewlead();
     }

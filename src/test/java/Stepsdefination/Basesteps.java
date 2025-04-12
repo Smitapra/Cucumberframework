@@ -26,80 +26,38 @@ import java.util.*;
 public class Basesteps {
 
     public static WebDriver driver;
-    public Properties prop;
-    public Map<String , Map<String,String>> dt;
-    public static LoginPage lp ;
-    public static LeadPage ldp ;
-    public String ScenarioName ;
-    public static ExtentHtmlReporter htmlReporter ;
-    public static ExtentReports extent ;
+    public static Properties prop;
+    public static LoginPage lp;
+    public static LeadPage ldp;
+
+    public static Map<String,Map<String,String>> dt;
+    public static String ScenarioName;
+
+    public static ExtentHtmlReporter htmlReporter;
+
+    public static ExtentReports extent;
+
     public static ExtentTest logger;
 
-
     public void initiation() throws FilloException {
-        loaddata();
-       if (dt==null)
-       {
-           loaddata();
-       }
-
-       if (prop==null)
-       {
-           readproperties();
-       }
-       if (driver==null)
-       {
-        launchapp();
-       }
-
-       if (extent==null)
-       {
-           generatereport();
-       }
-
-    }
-
-
-    public void launchapp()
-    {
-        if (prop.getProperty("BrowserName").equalsIgnoreCase("Edge"))
+        if(dt==null)
         {
-            driver = new EdgeDriver();
+            loaddata();
         }
-        else if (prop.getProperty("BrowserName").equalsIgnoreCase("Firefox"))
+        if(prop==null)
         {
-            driver = new FirefoxDriver();
+            readproperties();
         }
-        else if (prop.getProperty("BrowserName").equalsIgnoreCase("headless"))
+        if(extent==null)
         {
-            ChromeOptions opt = new ChromeOptions();
-            opt.addArguments("--headless");
-            driver = new ChromeDriver(opt);
+            createExtentReport();
         }
-        else
-        {
-            driver = new ChromeDriver();
-        }
-
-        logger.info(prop.getProperty("BrowserName")+"Browser successfully Lunched");
-        driver.get(prop.getProperty("Appurl"));
-        logger.info("url: "+prop.getProperty("Appurl")+" navigated successfully");
-        driver.manage().window().maximize();
-        lp = new LoginPage(driver,logger);
-        ldp = new LeadPage(driver,logger);
-
-    }
-
-    public void closeapp()
-    {
-        if (driver!=null)
-        driver.quit();
     }
 
     public void readproperties()
     {
-        prop = new Properties();
         try {
+            prop = new Properties();
             FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"/src/test/resources/Settings/Config.properties");
             prop.load(fis);
         } catch (Exception e) {
@@ -111,48 +69,44 @@ public class Basesteps {
         Fillo fillo=new Fillo();
         Connection connection=fillo.getConnection(System.getProperty("user.dir")+"/src/test/resources/TestData/data.xlsx");
         String strQuery="Select * from Sheet1";
-        dt = new HashMap<>();
         Recordset recordset=connection.executeQuery(strQuery);
-        List<String> lst =  recordset.getFieldNames();
-
+        dt = new HashMap<>();
+        List<String> colms = recordset.getFieldNames();
+        Map<String,String> colmdata = null;
         while(recordset.next()){
-            String ScenarioName = (recordset.getField("ScenarioName"));
-            Map<String ,String> m = new HashMap<>();
-
-            for (int i = 1; i<lst.size();i++ )
+            colmdata = new HashMap<>();
+            String ScenarioName = recordset.getField("ScenarioName");
+            for(int i=1;i<colms.size();i++)
             {
-                String colname = lst.get(i);
-                String colvalue = (recordset.getField(colname)) ;
-                m.put(colname , colvalue);
-
+                String colmname = colms.get(i);
+                String colmdt = recordset.getField(colmname);
+                colmdata.put(colmname,colmdt);
             }
-
-            dt.put(ScenarioName ,m);
+            dt.put(ScenarioName,colmdata);
         }
-
+        System.out.println(dt);
         recordset.close();
         connection.close();
     }
 
 
-    public void generatereport()
+    public void createExtentReport()
     {
         Date d = new Date();
-        DateFormat df = new SimpleDateFormat("ddMMyyyyhhmmss");
-        String Filename = df.format(d);
-        htmlReporter = new ExtentHtmlReporter(System.getProperty("user.dir")+"src/test/java/Report/ExtendReport"+Filename+".html");
-        // Create an object of Extent Report
+        DateFormat ft = new SimpleDateFormat("ddMMyyyyhhmmss");
+        String fileName = ft.format(d);
+        htmlReporter = new ExtentHtmlReporter(System.getProperty("user.dir") + "/src/test/java/reports/ExtentReport"+fileName+".html");
+        // Create an object of Extent Reports
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
-        extent.setSystemInfo("Host Name","Automation test Hub");
-        extent.setSystemInfo("Enviroment","UAT");
-        extent.setSystemInfo("User Name","Smita");
-        htmlReporter.config().setDocumentTitle("Vtiger");
-        htmlReporter.config().setReportName("Online Report");
+        extent.setSystemInfo("Host Name", "Automation Test");
+        extent.setSystemInfo("Environment", "UAT");
+        extent.setSystemInfo("User Name", "Sushree S");
+        htmlReporter.config().setDocumentTitle("Report details ");
+        // Name of the report
+        htmlReporter.config().setReportName("Vtiger");
+        // Dark Theme
         htmlReporter.config().setTheme(Theme.STANDARD);
 
-
     }
-
-
 }

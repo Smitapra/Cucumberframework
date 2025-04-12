@@ -17,73 +17,92 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
+import java.time.Duration;
+
 import static Stepsdefination.Basesteps.lp;
 
 public class Loginsteps extends Basesteps {
 
 
     @Before
-
-    public void getscenarioname(Scenario scenario) throws FilloException {
-
+    public void getScenarioName(Scenario scenario) throws FilloException {
+        initiation();
         ScenarioName = scenario.getName();
         logger = extent.createTest(ScenarioName);
     }
-
     @After
-    public void savereport()
+    public void tierdown()
+
     {
         extent.flush();
     }
 
 
+
     @Given("user should be on login page")
     public void user_should_be_on_login_page() throws FilloException {
-        initiation();
+
+        if(prop.getProperty("browser").equals("chrome")) {
+            driver = new ChromeDriver();
+        }
+        else if(prop.getProperty("browser").equals("edge")) {
+            driver = new EdgeDriver();
+        }
+        else if(prop.getProperty("browser").equals("firefox")) {
+            driver = new FirefoxDriver();
+        }
+        else
+        {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            driver = new ChromeDriver(options);
+        }
+        logger.info(prop.getProperty("browser")+" Browser lauched");
+        driver.get(prop.getProperty("appUrl"));
+        logger.info("Url :"+prop.getProperty("appUrl") +" navigated successfully");
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(prop.getProperty("globalwait"))));
+        lp = new LoginPage(driver,logger);
+        ldp = new LeadPage(driver,logger);
     }
-}
 
     @When("user enter the valid credential and click to login button")
-    public void user_enter_the_valid_credential()
-
-    {
-        lp.login();
+    public void user_enters_the_valid_credentials_and_click_on_login_button() {
+        lp.login(dt.get(ScenarioName).get("userid"),dt.get(ScenarioName).get("password"));
 
     }
 
     @When("user enter the invalid credential and click to login button")
-    public void user_enter_the_invalid_credential()
+    public void user_enters_the_invalid_credentials_and_click_on_login_button() {
+        lp.login(dt.get(ScenarioName).get("userid"),dt.get(ScenarioName).get("password"));
 
-    {
-        lp.login();
-        Login(dt.get(ScenarioName).get("Userid"),dt.get(ScenarioName).get("Password"));
-    }
-
-    @When("user enter the invalid credential username as {string} and password as {string}")
-    public void user_enter_the_invalid_credential_username_as_and_password_as(String uid, String pwd)
-    {
-        lp.Login(uid,pwd);
     }
 
     @Then("user can see the error message")
-    public void user_can_see_the_error_message()
-    {
-    lp.verifyerrormessage();
+    public void verifyErrormessage() {
+
+        lp.verifyerrormessage();
     }
 
     @Then("user should be navigated to Home page")
     public void user_should_be_navigated_to_home_page()
     {
-
+        ldp.Verifyhome();
     }
-
-
-    @Then("Close the Browser")
-    public void close_the_browser()
+    @Then("user can see the logout link")
+    public void user_can_see_the_logout_link()
     {
-        if (driver!=null)
-        {
-            driver.quit();
-        }
+
+        ldp.verifylogout();
+    }
+    @Then("Close the Browser")
+    public void close_browser()
+    {
+        driver.quit();
     }
 
+    @When("user enters the invalid credentials username as {string} and password as {string} and click on login button")
+    public void user_enters_the_invalid_credentials_username_as_and_password_as_and_click_on_login_button(String uid, String pwd) {
+        lp.login(uid,pwd);
+    }
+}

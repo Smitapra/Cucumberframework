@@ -42,8 +42,8 @@ public class LeadPage extends HeaderPage {
 
     public void verifylead(String txt_lname , String txt_comp )
     {
-        driver.findElement(By.xpath("//td[text()='Last Name:']/following::td[1][text()='"+txt_lname+"']")).isDisplayed();
-        driver.findElement(By.xpath("//td[text()='Company:']/following::td[1][text()='"+txt_comp+"']")).isDisplayed();
+        msgdisplay(driver.findElement(By.xpath("//td[text()='Last Name:']/following::td[1][text()='"+txt_lname+"']")));
+        msgdisplay(driver.findElement(By.xpath("//td[text()='Company:']/following::td[1][text()='"+txt_comp+"']")));
     }
 
 

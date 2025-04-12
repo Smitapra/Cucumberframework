@@ -11,8 +11,6 @@ import org.openqa.selenium.support.PageFactory;
 
 public class HeaderPage extends CommonMethods {
 
-    public WebDriver driver;
-    public ExtentTest logger;
 
     public HeaderPage(WebDriver driver, ExtentTest logger)
     {
@@ -21,27 +19,30 @@ public class HeaderPage extends CommonMethods {
         PageFactory.initElements(driver ,this);
     }
 
-    @FindBy(linkText = "Home")
-    WebElement Home_link;
+    @FindBy(linkText="Home")
+    WebElement home_link;
 
-    @FindBy(linkText = "Logout")
+    @FindBy(linkText="Logout")
     WebElement Logout_link;
 
-    @FindBy(linkText = "New Lead")
+    @FindBy(linkText="New Lead")
     WebElement new_lead;
 
-    public void verifyhome()
+    @FindBy(linkText="Leads")
+    WebElement lnk_lead;
+
+    public void Verifyhome()
     {
-        Home_link.isDisplayed();
+        home_link.isDisplayed();
     }
     public void verifylogout()
+
 
     {
         Logout_link.isDisplayed();
     }
 
     public void clicklogout()
-
     {
         Logout_link.click();
     }
@@ -49,6 +50,12 @@ public class HeaderPage extends CommonMethods {
     public void clicknewlead()
     {
         new_lead.click();
+    }
+
+    public void clicklead()
+
+    {
+        lnk_lead.click();
     }
 
 

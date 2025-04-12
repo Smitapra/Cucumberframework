@@ -14,9 +14,6 @@ import org.junit.runner.RunWith;
         tags = "@SS",
         monochrome = true
 
-
-
-
 )
 
 public class Testrunner {
