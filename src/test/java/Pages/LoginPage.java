@@ -37,15 +37,15 @@ public class LoginPage extends CommonMethods {
 
     public void login(String uid , String pwd)
     {
-        Type(userid,uid, uid + "password enter successfully");
-        Type(password,pwd, pwd + "password enter successfully");
+        Type(userid,uid, uid + "user entered successfully");
+        Type(password,pwd, pwd + "password entered successfully");
         clickelement(login, "user successfully click to login button");
 
     }
 
     public void verifyerrormessage()
     {
-        msgdisplay(errormsg);
+        msgdisplay(errormsg, "error message should be display");
     }
 
 

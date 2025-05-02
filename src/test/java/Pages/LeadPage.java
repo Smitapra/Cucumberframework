@@ -32,19 +32,25 @@ public class LeadPage extends HeaderPage {
 
 
 
+
+
     public void createlead(String txt_lname , String txt_comp )
     {
 
     Type(lst_name,txt_lname,txt_lname + "lastname enter successfully");
     Type(comp_name,txt_comp,txt_comp + "compname enter successfully");
-    clickelement(save,"user successfully click to login button");
+    clickelement(save,"user successfully click to login button" + Screenshot());
     }
 
-    public void verifylead(String txt_lname , String txt_comp )
+    public void verifylead(String txt_label,String txt )
     {
-        msgdisplay(driver.findElement(By.xpath("//td[text()='Last Name:']/following::td[1][text()='"+txt_lname+"']")));
-        msgdisplay(driver.findElement(By.xpath("//td[text()='Company:']/following::td[1][text()='"+txt_comp+"']")));
+        WebElement elm = driver.findElement(By.xpath("//td[text()='"+txt_label+":']/following::td[1][text()='"+txt+"']"));
+        msgdisplay(elm,"lead viewed successfully" + Screenshot());
     }
+
+
+
+
 
 
 

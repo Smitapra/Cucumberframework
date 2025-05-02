@@ -26,7 +26,10 @@ public class Loginsteps extends Basesteps {
 
     @Before
     public void getScenarioName(Scenario scenario) throws FilloException {
-        initiation();
+        if(extent==null)
+        {
+            createExtentReport();
+        }
         ScenarioName = scenario.getName();
         logger = extent.createTest(ScenarioName);
     }
@@ -35,35 +38,16 @@ public class Loginsteps extends Basesteps {
 
     {
         extent.flush();
+        driver.quit();
     }
 
 
 
     @Given("user should be on login page")
-    public void user_should_be_on_login_page() throws FilloException {
+    public void user_should_be_on_login_page() throws FilloException
+    {
 
-        if(prop.getProperty("browser").equals("chrome")) {
-            driver = new ChromeDriver();
-        }
-        else if(prop.getProperty("browser").equals("edge")) {
-            driver = new EdgeDriver();
-        }
-        else if(prop.getProperty("browser").equals("firefox")) {
-            driver = new FirefoxDriver();
-        }
-        else
-        {
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless");
-            driver = new ChromeDriver(options);
-        }
-        logger.info(prop.getProperty("browser")+" Browser lauched");
-        driver.get(prop.getProperty("appUrl"));
-        logger.info("Url :"+prop.getProperty("appUrl") +" navigated successfully");
-        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(prop.getProperty("globalwait"))));
-        lp = new LoginPage(driver,logger);
-        ldp = new LeadPage(driver,logger);
+        initiation();
     }
 
     @When("user enter the valid credential and click to login button")
@@ -95,10 +79,16 @@ public class Loginsteps extends Basesteps {
 
         ldp.verifylogout();
     }
-    @Then("Close the Browser")
-    public void close_browser()
+//    @Then("Close the Browser")
+//    public void close_browser()
+//    {
+//        driver.quit();
+//    }
+
+    @Then("user able to logout")
+    public void user_able_to_logout()
     {
-        driver.quit();
+    ldp.clicklogout();
     }
 
     @When("user enters the invalid credentials username as {string} and password as {string} and click on login button")

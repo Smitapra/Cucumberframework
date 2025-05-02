@@ -9,12 +9,13 @@ Feature: Login functionality
     When user enter the valid credential and click to login button
     Then user should be navigated to Home page
     And user can see the logout link
-    And Close the Browser
+    And user able to logout
+
   @SS
   Scenario: TC02_invalid_login_page
     When user enter the invalid credential and click to login button
     Then user can see the error message
-    And Close the Browser
+
 
 
 

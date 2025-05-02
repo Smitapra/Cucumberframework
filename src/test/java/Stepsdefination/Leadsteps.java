@@ -28,7 +28,8 @@ public class Leadsteps extends Basesteps
     @Then("Lead should be created and validated successfully")
     public void lead_should_be_created_and_validated_successfully()
     {
-        ldp.verifylead("praharaj","synechron");
+        ldp.verifylead("Last Name","praharaj");
+        ldp.verifylead("Company","synechron");
 
     }
 

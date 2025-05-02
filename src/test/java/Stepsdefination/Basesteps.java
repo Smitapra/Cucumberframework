@@ -1,5 +1,6 @@
 package Stepsdefination;
 
+import Pages.HomePage;
 import Pages.LeadPage;
 import Pages.LoginPage;
 import com.aventstack.extentreports.ExtentReports;
@@ -21,6 +22,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.*;
 
 public class Basesteps {
@@ -29,6 +31,7 @@ public class Basesteps {
     public static Properties prop;
     public static LoginPage lp;
     public static LeadPage ldp;
+    public static HomePage HM;
 
     public static Map<String,Map<String,String>> dt;
     public static String ScenarioName;
@@ -40,19 +43,52 @@ public class Basesteps {
     public static ExtentTest logger;
 
     public void initiation() throws FilloException {
-        if(dt==null)
-        {
-            loaddata();
-        }
+
         if(prop==null)
         {
             readproperties();
         }
-        if(extent==null)
+        if (driver==null)
         {
-            createExtentReport();
+            launchapp();
         }
+
+        if(dt==null)
+        {
+            loaddata();
+        }
+
     }
+
+    public void launchapp()
+    {
+
+        if (prop.getProperty("browser").equals("chrome")) {
+            driver = new ChromeDriver();
+        } else if (prop.getProperty("browser").equals("edge")) {
+            driver = new EdgeDriver();
+        } else if (prop.getProperty("browser").equals("firefox")) {
+            driver = new FirefoxDriver();
+        } else if (prop.getProperty("browser").equals("headless")) {
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--headless");
+            driver = new ChromeDriver(options);
+        }
+        else
+        {
+            driver = new ChromeDriver();
+        }
+        logger.info("browser name "+prop.getProperty("browser"));
+        driver.get(prop.getProperty("appUrl"));
+        logger.info("Url :" + prop.getProperty("appUrl") + " navigated successfully");
+        driver.manage().window().maximize();
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(Integer.parseInt(prop.getProperty("globalwait"))));
+        lp = new LoginPage(driver, logger);
+        ldp = new LeadPage(driver, logger);
+        HM = new HomePage(driver,logger);
+
+    }
+
 
     public void readproperties()
     {
@@ -78,8 +114,8 @@ public class Basesteps {
             String ScenarioName = recordset.getField("ScenarioName");
             for(int i=1;i<colms.size();i++)
             {
-                String colmname = colms.get(i);
-                String colmdt = recordset.getField(colmname);
+                String colmname = colms.get(i).trim();
+                String colmdt = recordset.getField(colmname).trim();
                 colmdata.put(colmname,colmdt);
             }
             dt.put(ScenarioName,colmdata);

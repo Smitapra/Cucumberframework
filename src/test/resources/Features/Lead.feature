@@ -9,6 +9,6 @@ Feature: Lead Functionality
       When user click on the new lead link
       And fill the lastname and company name and click to save button
       Then Lead should be created and validated successfully
-      And Close the Browser
+      And user able to logout
 
 
