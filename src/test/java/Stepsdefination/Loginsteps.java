@@ -38,7 +38,7 @@ public class Loginsteps extends Basesteps {
 
     {
         extent.flush();
-        //driver.quit();
+        driver.quit();
     }
 
 
